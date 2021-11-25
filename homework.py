@@ -33,19 +33,18 @@ class InfoMessage:
 
     def get_message(self) -> str:
         """Возвращает объект класса InfoMessage для дальнейшей работы с ним."""
-        return (f'\nТип тренировки: {self.training_type}; '
+        return (f'Тип тренировки: {self.training_type}; '
                 f'Длительность: {self.duration:.3f} ч.; '
                 f'Дистанция: {self.distance:.3f} км; '
                 f'Ср. скорость: {self.speed:.3f} км/ч; '
                 f'Потрачено ккал: {self.calories:.3f}.')
 
 
-LEN_STEP: float = 0.65
-M_IN_KM: int = 1000
-
-
 class Training:
     """Базовый класс тренировки."""
+    LEN_STEP = 0.65
+    M_IN_KM = 1000
+
     def __init__(self,
                  action: int,
                  duration: float,
@@ -55,9 +54,9 @@ class Training:
         self.duration = duration
         self.weight = weight
 
-    def get_distance(self) -> float:
+    def get_distance(self, ) -> float:
         """Получить дистанцию в км."""
-        self.distance = ((self.action * LEN_STEP) / M_IN_KM)
+        self.distance = self.action * self.LEN_STEP / self.M_IN_KM
         return self.distance
 
     def get_mean_speed(self) -> float:
@@ -93,7 +92,7 @@ class Running(Training):
         run_calorie_2: float = 20
         self.calories = ((run_calorie_1 * Training.get_mean_speed(self)
                          - run_calorie_2)
-                         * self.weight / M_IN_KM * (self.duration * 60))
+                         * self.weight / self.M_IN_KM * (self.duration * 60))
         return self.calories
 
 
@@ -137,13 +136,13 @@ class Swimming(Training):
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения плавания."""
         self.speed = (((self.length_pool * self.count_pool)
-                      / M_IN_KM) / self.duration)
+                      / self.M_IN_KM) / self.duration)
         return self.speed
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий при плавании."""
         swim_calorie_1: float = 1.1
-        self.calories = ((Training.get_mean_speed(self) + swim_calorie_1)
+        self.calories = ((Swimming.get_mean_speed(self) + swim_calorie_1)
                          * 2 * self.weight)
         return self.calories
 
